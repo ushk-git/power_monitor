@@ -38,19 +38,19 @@ class Monitor:
     def print(self, text):
     	text = str(text)
     
-    # Ensure the text is not longer than twice the LCD width (16 chars per line, so 32 chars max)
+
     	text = text[:LCD_WIDTH * 2]
     
-    # Split text into two parts, one for each line
+   
     	line_1 = text[:LCD_WIDTH]
     	line_2 = text[LCD_WIDTH:]
 
-    # Print first line
+  
     	self.lcd_send_byte(LCD_LINE_1, LCD_CMD)
     	for char in line_1:
         	self.lcd_send_byte(ord(char), LCD_CHR)
 
-    # Print second line
+   
     	self.lcd_send_byte(LCD_LINE_2, LCD_CMD)
     	for char in line_2:
         	self.lcd_send_byte(ord(char), LCD_CHR)
