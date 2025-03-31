@@ -37,10 +37,9 @@ while True:
         power = current * voltage
 
         output.clear()
-        output.print(f"CUR: {current:.2f} A  VOLT: {voltage:.2f} V")
-        output.print(f"POWER: {power:.2f} W")
-        time.sleep(0.1)   
-    print
+        output.print(f"I:{current:.2f}A;V:{voltage:.2f}V    POWER {power:.2f}W")
+        time.sleep(refresh_rate)   
+
     clock_time = time.time() - start_time
     
     if clock_time >= sample_second:
