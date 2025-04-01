@@ -1,4 +1,4 @@
-import acs712
+
 import compression
 import monitor
 import time
@@ -6,6 +6,7 @@ import os
 import configparser
 import datetime
 import rpi
+import serial
 output = monitor.Monitor()
 
 config = configparser.ConfigParser()
@@ -14,30 +15,36 @@ enable_compression = config.getboolean("DATA", "Compression")
 sample_second = config.getfloat("DATA", "SamplingSeconds")
 refresh_rate = config.getfloat("DATA", "RefreshRate")
 
-output.print("Compression")
-output.print(enable_compression)
+output.print("Compression: " + enable_compression)
+
 time.sleep(0.5)
 output.clear()
 
-acs712 = acs712.Acs712()
+
 exporter = compression.Csv_Export()
 
 start_time = time.time()
 rpi = rpi.RPi()
-
+ser = serial.Serial('/dev/ttyS0', 9600)
+output.clear()
+output.print("WAIT TILL INIT")
+time.sleep(1)
+output.clear()
+output.print("OK!")
+time.sleep(0.5)
 while True:
 
     print(rpi.get_cpu_temp())
         
     refresh_start = time.time()
 
-    while time.time() - refresh_start < refresh_rate:  
-        current = acs712.get_current()
-        voltage = acs712.get_voltage()
-        power = current * voltage
+    while time.time() - refresh_start < refresh_rate:  f
 
         output.clear()
-        output.print(f"I:{current:.2f}A;V:{voltage:.2f}V    POWER {power:.2f}W")
+        data = ser.readline().decode('utf-8').strip()
+        if data:
+            output.print(f"{data}")
+
         time.sleep(refresh_rate)   
 
     clock_time = time.time() - start_time
